@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "982165538105",
+    "firebase_url": "https://tech-cafeteria.firebaseio.com",
+    "project_id": "tech-cafeteria",
+    "storage_bucket": "tech-cafeteria.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:982165538105:android:a9daa57392d5ac143c54e8",
+        "android_client_info": {
+          "package_name": "com.shami.cafeteria"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "982165538105-s3f4pau72ahvc48jstrcspkta25ounfu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-jVdGAEfqEm8JkCsFK8Ny4X8Sq7RcVDE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "982165538105-s3f4pau72ahvc48jstrcspkta25ounfu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
