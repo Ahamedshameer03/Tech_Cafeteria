@@ -1,8 +1,15 @@
+import 'package:cafeteria/components/loading.dart';
 import 'package:cafeteria/screens/Cart.dart';
+import 'package:cafeteria/services/Provider/app_provider.dart';
+import 'package:cafeteria/services/Provider/product_provider.dart';
+import 'package:cafeteria/services/Provider/user_provider.dart';
+import 'package:cafeteria/components/size_cofig.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:cafeteria/components/Horizontal_ListView.dart';
-import 'package:cafeteria/components/products.dart';
+import 'package:cafeteria/widgets/Horizontal_ListView.dart';
+import 'package:cafeteria/widgets/products.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -10,10 +17,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final UserProvider user = UserProvider.initialize();
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
+    final _user = Provider.of<UserProvider>(context);
+    //final productProvider = Provider.of<ProductProvider>(context);
+    AppProvider appProvider = Provider.of<AppProvider>(context);
+    SizeConfig().init(context);
     Widget image_carousel = new Container(
-      height: 200.0,
+      height: SizeConfig.blockSizeVertical * 30,
       child: new Carousel(
         boxFit: BoxFit.cover,
         images: [
@@ -33,7 +47,13 @@ class _HomeState extends State<Home> {
       appBar: PreferredSize(
           child: AppBar(
             elevation: 0.1,
-            title: Text('Cafeteria'),
+            title: Text(
+              'Cafeteria',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: SizeConfig.safeBlockVertical * 2.5,
+              ),
+            ),
             flexibleSpace: Container(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -62,13 +82,29 @@ class _HomeState extends State<Home> {
                   }),
             ],
           ),
-          preferredSize: Size.fromHeight(50.0)),
+          preferredSize: Size.fromHeight(
+            SizeConfig.safeBlockVertical * 6.5,
+          )),
       drawer: new Drawer(
         child: new ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountName: Text('Shameer'),
-              accountEmail: Text('shameer@gmail.com'),
+              accountName: Text(
+                _user.userModel.name ?? "username loading...",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              accountEmail: Text(
+                _user.userModel.email ?? "email loading...",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
               currentAccountPicture: GestureDetector(
                 child: new CircleAvatar(
                   backgroundColor: Colors.grey,
@@ -82,7 +118,10 @@ class _HomeState extends State<Home> {
               decoration: BoxDecoration(color: Colors.red),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Home()));
+              },
               child: ListTile(
                 title: Text('Home'),
                 leading: Icon(
@@ -142,6 +181,51 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
+            InkWell(
+              onTap: () {
+                {
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: Text('Are you really want to Sign Out ?'),
+                        actions: <Widget>[
+                          CupertinoDialogAction(
+                            child: Text('Sign Out !',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold)),
+                            onPressed: () async {
+                              setState(() {
+                                loading = true;
+                              });
+                              await user.signOut();
+                              Navigator.pop(context);
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            child: Text('No',
+                                style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontWeight: FontWeight.bold)),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          )
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+              child: ListTile(
+                title: Text('Sign Out'),
+                leading: Icon(
+                  Icons.exit_to_app,
+                  color: Colors.black,
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -153,21 +237,34 @@ class _HomeState extends State<Home> {
           //Padding Widget
           new Padding(
             padding: const EdgeInsets.all(8.0),
-            child: new Text('Categories'),
+            child: new Text(
+              'Categories',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: SizeConfig.safeBlockVertical * 2.5,
+              ),
+            ),
           ),
 
           //Horizontal ListView
           HorizontalList(),
+          //Text(appProvider.products.length.toString()),
 
           //Padding Widget
           new Padding(
             padding: const EdgeInsets.fromLTRB(8, 25, 8, 8),
-            child: new Text('Recent Items'),
+            child: new Text(
+              'Recent Items',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: SizeConfig.safeBlockVertical * 2.5,
+              ),
+            ),
           ),
 
           //Grid View
           Container(
-            height: 320.0,
+            height: SizeConfig.safeBlockVertical * 50,
             child: Products(),
           )
         ],

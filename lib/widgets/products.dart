@@ -1,3 +1,4 @@
+import 'package:cafeteria/components/size_cofig.dart';
 import 'package:flutter/material.dart';
 import 'package:cafeteria/screens/Product_Details.dart';
 
@@ -80,7 +81,7 @@ class Single_Prod extends StatelessWidget {
                       product_name,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: SizeConfig.safeBlockVertical * 2.5,
                       ),
                     ),
                   ),
@@ -89,7 +90,7 @@ class Single_Prod extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: SizeConfig.safeBlockVertical * 2.5,
                     ),
                   )
                 ]),

@@ -1,7 +1,9 @@
+import 'package:cafeteria/components/size_cofig.dart';
 import 'package:cafeteria/screens/home_page.dart';
+import 'package:cafeteria/components/loading.dart';
+import 'package:cafeteria/widgets/Similar_products.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cafeteria/components/Similar_products.dart';
 
 class ProductDetails extends StatefulWidget {
   final product_detail_name;
@@ -20,20 +22,28 @@ class ProductDetails extends StatefulWidget {
 class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       appBar: PreferredSize(
           child: AppBar(
             elevation: 0.1,
             title: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Home(),
-                    ),
-                  );
-                },
-                child: Text('Cafeteria')),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Home(),
+                  ),
+                );
+              },
+              child: Text(
+                'Cafeteria',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: SizeConfig.safeBlockVertical * 2.5,
+                ),
+              ),
+            ),
             flexibleSpace: Container(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -53,29 +63,38 @@ class _ProductDetailsState extends State<ProductDetails> {
                   onPressed: () {}),
             ],
           ),
-          preferredSize: Size.fromHeight(50.0)),
+          preferredSize: Size.fromHeight(
+            SizeConfig.safeBlockVertical * 6.5,
+          )),
       body: new ListView(
         children: <Widget>[
           new Container(
-            height: 250,
+            height: SizeConfig.safeBlockVertical * 40,
             child: GridTile(
               child: Container(
                 color: Colors.white,
-                child: Image.asset(widget.product_detail_picture),
+                child: Image.asset(
+                  widget.product_detail_picture,
+                ),
               ),
               footer: new Container(
                 color: Colors.white70,
                 child: ListTile(
                   leading: new Text(
                     widget.product_detail_name,
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: SizeConfig.safeBlockVertical * 3,
+                    ),
                   ),
                   title: new Text(
                     "Rs.${widget.product_detail_price}",
                     textAlign: TextAlign.right,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.red),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                      fontSize: SizeConfig.safeBlockVertical * 3,
+                    ),
                   ),
                 ),
               ),
@@ -93,14 +112,26 @@ class _ProductDetailsState extends State<ProductDetails> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: new Text('Quantity'),
-                              content: new Text('Choose the quantity'),
+                              title: new Text('Quantity',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: SizeConfig.safeBlockVertical * 2,
+                                  )),
+                              content: new Text('Choose the quantity',
+                                  style: TextStyle(
+                                    fontSize: SizeConfig.safeBlockVertical * 2,
+                                  )),
                               actions: <Widget>[
                                 new MaterialButton(
                                   onPressed: () {
                                     Navigator.of(context).pop(context);
                                   },
-                                  child: new Text('close'),
+                                  child: new Text('close',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            SizeConfig.safeBlockVertical * 2,
+                                      )),
                                 )
                               ],
                             );
@@ -111,7 +142,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                     child: Row(
                       children: <Widget>[
                         Expanded(
-                          child: new Text('Quantity'),
+                          child: new Text('Quantity',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: SizeConfig.safeBlockVertical * 2,
+                              )),
                         ),
                         Expanded(child: new Icon(Icons.arrow_drop_down))
                       ],
@@ -125,25 +160,37 @@ class _ProductDetailsState extends State<ProductDetails> {
           new Row(
             children: <Widget>[
               SizedBox(
-                width: 20,
+                width: SizeConfig.safeBlockVertical * 2.5,
               ),
               Expanded(
                 child: MaterialButton(
                   onPressed: () {},
                   color: Colors.red,
                   textColor: Colors.white,
-                  child: new Text('Buy Now'),
+                  child: new Text(
+                    'Buy Now',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: SizeConfig.safeBlockVertical * 2.5,
+                    ),
+                  ),
                 ),
               ),
               SizedBox(
-                width: 20,
+                width: SizeConfig.safeBlockVertical * 2.5,
               ),
               new IconButton(
-                  icon: Icon(Icons.add_shopping_cart),
+                  icon: Icon(
+                    Icons.add_shopping_cart,
+                    size: SizeConfig.safeBlockVertical * 3,
+                  ),
                   color: Colors.red,
                   onPressed: () {}),
               new IconButton(
-                  icon: Icon(Icons.favorite_border),
+                  icon: Icon(
+                    Icons.favorite_border,
+                    size: SizeConfig.safeBlockVertical * 3,
+                  ),
                   color: Colors.red,
                   onPressed: () {})
             ],
@@ -151,12 +198,18 @@ class _ProductDetailsState extends State<ProductDetails> {
           Divider(),
           new Padding(
             padding: const EdgeInsets.fromLTRB(8, 25, 8, 8),
-            child: new Text('Similar Products'),
+            child: new Text(
+              'Similar Products',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: SizeConfig.safeBlockVertical * 2.5,
+              ),
+            ),
           ),
 
           //Grid View
           Container(
-            height: 320.0,
+            height: SizeConfig.safeBlockVertical * 50,
             child: SimilarProducts(),
           ),
         ],

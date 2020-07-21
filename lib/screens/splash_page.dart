@@ -1,4 +1,5 @@
-import 'package:cafeteria/screens/menu_frame.dart';
+import 'package:cafeteria/main.dart';
+import 'package:cafeteria/components/size_cofig.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,16 +33,19 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void navigationPage() {
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (_) => MenuFrame()));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => ScreensController()));
   }
 
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return new Theme(
         data: new ThemeData(
           canvasColor: Colors.transparent,
         ),
         child: new Container(
+          height: SizeConfig.screenHeight,
+          width: SizeConfig.screenWidth,
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('images/Background.png'),

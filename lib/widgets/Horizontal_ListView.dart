@@ -1,3 +1,4 @@
+import 'package:cafeteria/components/size_cofig.dart';
 import 'package:flutter/material.dart';
 
 class HorizontalList extends StatelessWidget {
@@ -42,12 +43,13 @@ class Category extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: InkWell(
         onTap: () {},
         child: Container(
-          width: 150.0,
+          width: SizeConfig.safeBlockHorizontal * 35,
           child: ListTile(
               title: Image.asset(
                 image_location,
@@ -56,7 +58,13 @@ class Category extends StatelessWidget {
               ),
               subtitle: Container(
                 alignment: Alignment.topCenter,
-                child: Text(image_caption),
+                child: Text(
+                  image_caption,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: SizeConfig.safeBlockVertical * 1.5,
+                  ),
+                ),
               )),
         ),
       ),

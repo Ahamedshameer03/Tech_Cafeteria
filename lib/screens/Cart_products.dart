@@ -63,7 +63,9 @@ class Single_Cart_Product extends StatelessWidget {
             width: 80,
             height: 80,
           ),
-          title: new Text(cart_product_name),
+          title: new Text(
+            cart_product_name,
+          ),
           subtitle: new Container(
             alignment: Alignment.topLeft,
             child: new Text(
@@ -81,7 +83,9 @@ class Single_Cart_Product extends StatelessWidget {
             child: new Row(
               children: <Widget>[
                 new IconButton(
-                  icon: Icon(Icons.remove_circle_outline),
+                  icon: Icon(
+                    Icons.remove_circle_outline,
+                  ),
                   color: Colors.green,
                   onPressed: () {},
                 ),

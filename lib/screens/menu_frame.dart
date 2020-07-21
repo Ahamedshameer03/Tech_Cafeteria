@@ -1,6 +1,9 @@
-import 'package:cafeteria/screens/sign_in_page.dart';
-import 'package:cafeteria/screens/sign_up_page.dart';
+import 'dart:ui';
+import 'package:cafeteria/components/size_cofig.dart';
 import 'package:flutter/material.dart';
+
+import 'authenticate/sign_in_page.dart';
+import 'authenticate/sign_up_page.dart';
 
 class MenuFrame extends StatelessWidget {
   PageController pageController = PageController();
@@ -13,6 +16,7 @@ class MenuFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Material(
       child: Container(
         child: SafeArea(
@@ -21,9 +25,9 @@ class MenuFrame extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Image.asset(
-                  'images/icon.png',
-                  width: 100,
-                  height: 100,
+                  'images/logo.png',
+                  width: SizeConfig.safeBlockHorizontal * 30,
+                  height: SizeConfig.safeBlockVertical * 30,
                 ),
                 Expanded(
                   child: PageView(
@@ -46,8 +50,11 @@ class MenuFrame extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              //Colors.black,
+              //Colors.blue,
+              Colors.red,
+              Colors.blueAccent,
               Color.fromRGBO(255, 123, 67, 1.0),
+              Colors.blueAccent,
               Color.fromRGBO(245, 50, 111, 1.0),
             ],
           ),
