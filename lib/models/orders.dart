@@ -13,7 +13,7 @@ class OrderModel {
   String _description;
   String _userId;
   String _status;
-  int _createdAt;
+  DateTime _createdAt;
   int _total;
 
 //  getters
@@ -22,7 +22,7 @@ class OrderModel {
   String get userId => _userId;
   String get status => _status;
   int get total => _total;
-  int get createdAt => _createdAt;
+  DateTime get createdAt => _createdAt;
 
   // public variable
   List cart;
@@ -33,7 +33,7 @@ class OrderModel {
     _total = snapshot.data[TOTAL];
     _status = snapshot.data[STATUS];
     _userId = snapshot.data[USER_ID];
-    _createdAt = snapshot.data[CREATED_AT];
+    _createdAt = snapshot.data[CREATED_AT].toDate();
     cart = snapshot.data[CART];
   }
 }

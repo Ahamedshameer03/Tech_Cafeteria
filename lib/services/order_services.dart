@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class OrderServices {
   String collection = "orders";
   Firestore _firestore = Firestore.instance;
+  OrderModel order;
 
   void createOrder(
       {String userId,
@@ -17,7 +18,7 @@ class OrderServices {
       "id": id,
       "cart": cart,
       "total": totalPrice,
-      "createdAt": DateTime.now().millisecondsSinceEpoch,
+      "createdAt": DateTime.now(),
       "description": description,
       "status": status
     });
@@ -26,6 +27,7 @@ class OrderServices {
   Future<List<OrderModel>> getUserOrders({String userId}) async => _firestore
           .collection(collection)
           .where("userId", isEqualTo: userId)
+          .orderBy("createdAt", descending: true)
           .getDocuments()
           .then((result) {
         List<OrderModel> orders = [];
@@ -34,4 +36,28 @@ class OrderServices {
         }
         return orders;
       });
+
+  Future<List<DocumentSnapshot>> getOrders() async => _firestore
+          .collection(collection)
+          .orderBy("createdAt", descending: true)
+          .getDocuments()
+          .then((snaps) {
+        return snaps.documents;
+      });
+
+  Future<List<DocumentSnapshot>> getOrderById({String orderId}) async =>
+      _firestore
+          .collection(collection)
+          .where("id", isEqualTo: orderId)
+          .getDocuments()
+          .then((snaps) {
+        return snaps.documents;
+      });
+
+  statusUpdate({String orderId}) async {
+    _firestore
+        .collection(collection)
+        .document(orderId)
+        .updateData({"status": "Delivered"});
+  }
 }

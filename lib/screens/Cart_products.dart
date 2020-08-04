@@ -1,4 +1,8 @@
+import 'package:cafeteria/components/size_cofig.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../services/Provider/user_provider.dart';
 
 class Cart_Products extends StatefulWidget {
   @override
@@ -6,103 +10,148 @@ class Cart_Products extends StatefulWidget {
 }
 
 class _Cart_ProductsState extends State<Cart_Products> {
-  var Product_on_the_cart = [
-    {
-      "name": "Dosa",
-      "picture": "images/Tiffen/Dosa.png",
-      "price": "20",
-      "quantity": "5",
-    },
-    {
-      "name": "Tea",
-      "picture": "images/Drinks/Tea.png",
-      "price": "10",
-      "quantity": "5",
-    },
-    {
-      "name": "Ice Cream",
-      "picture": "images/Snacks/ice_cream.png",
-      "price": "15",
-      "quantity": "5",
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    final user = Provider.of<UserProvider>(context);
+
     return new ListView.builder(
-        itemCount: Product_on_the_cart.length,
+        itemCount: user.userModel.cart.length,
         itemBuilder: (context, index) {
           return Single_Cart_Product(
-            cart_product_name: Product_on_the_cart[index]["name"],
-            cart_product_picture: Product_on_the_cart[index]["picture"],
-            cart_product_price: Product_on_the_cart[index]["price"],
-            cart_product_quantity: Product_on_the_cart[index]["quantity"],
+            cart_product_name: user.userModel.cart[index]['name'],
+            cart_product_picture: user.userModel.cart[index]['imageUrl'],
+            cart_product_price: user.userModel.cart[index]['price'],
+            cart_product_quantity: user.userModel.cart[index]['quantity'],
+            index: index,
           );
         });
   }
 }
 
 class Single_Cart_Product extends StatelessWidget {
-  final cart_product_name;
-  final cart_product_picture;
-  final cart_product_price;
-  final cart_product_quantity;
+  final String cart_product_name;
+  final String cart_product_picture;
+  final int cart_product_price;
+  final int cart_product_quantity;
+  final int index;
+  final _key = GlobalKey<ScaffoldState>();
 
-  Single_Cart_Product(
-      {this.cart_product_name,
-      this.cart_product_picture,
-      this.cart_product_price,
-      this.cart_product_quantity});
+  Single_Cart_Product({
+    this.cart_product_name,
+    this.cart_product_picture,
+    this.cart_product_price,
+    this.cart_product_quantity,
+    this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-          leading: new Image.asset(
-            cart_product_picture,
-            width: 80,
-            height: 80,
+    SizeConfig().init(context);
+    final user = Provider.of<UserProvider>(context);
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 5,
+              spreadRadius: 0.1,
+            ),
+          ],
+        ),
+        child: Card(
+          elevation: 3,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
           ),
-          title: new Text(
-            cart_product_name,
-          ),
-          subtitle: new Container(
-            alignment: Alignment.topLeft,
-            child: new Text(
-              "Rs.$cart_product_price",
+          child: ListTile(
+            leading: new Image.network(
+              cart_product_picture,
+              width: SizeConfig.safeBlockVertical * 10,
+              height: SizeConfig.safeBlockVertical * 10,
+            ),
+            title: new Text(
+              cart_product_name,
               style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: Colors.red,
+                fontSize: SizeConfig.safeBlockVertical * 2.5,
+              ),
+            ),
+            subtitle: new Container(
+              alignment: Alignment.topLeft,
+              child: new Text(
+                "$cart_product_price  x  $cart_product_quantity",
+                //'price',
+                style: TextStyle(
+                  fontSize: SizeConfig.safeBlockVertical * 2,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            trailing: Container(
+              height: SizeConfig.safeBlockVertical * 10,
+              width: SizeConfig.safeBlockVertical * 17.3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  new Text(
+                    'Rs. ${cart_product_price * cart_product_quantity}',
+                    //'f',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: SizeConfig.safeBlockVertical * 2.5,
+                    ),
+                  ),
+                  new IconButton(
+                      icon: Icon(
+                        Icons.close,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: Text(
+                                  'Are you sure to Remove item from cart ?'),
+                              actions: <Widget>[
+                                CupertinoDialogAction(
+                                  child: Text('Remove !',
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold)),
+                                  onPressed: () async {
+                                    user.removeFromCart(
+                                        cartItem: user.userModel.cart[index]);
+                                    user.reloadUserModel();
+
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                CupertinoDialogAction(
+                                  child: Text('No',
+                                      style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontWeight: FontWeight.bold)),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      }),
+                ],
               ),
             ),
           ),
-          trailing: new Container(
-            height: 100,
-            width: 120,
-            child: new Row(
-              children: <Widget>[
-                new IconButton(
-                  icon: Icon(
-                    Icons.remove_circle_outline,
-                  ),
-                  color: Colors.green,
-                  onPressed: () {},
-                ),
-                new Text(
-                  cart_product_quantity,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                new IconButton(
-                  icon: Icon(
-                    Icons.add_circle_outline,
-                    color: Colors.green,
-                  ),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          )),
+        ),
+      ),
     );
   }
 }

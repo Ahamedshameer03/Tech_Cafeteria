@@ -1,29 +1,50 @@
 import 'package:cafeteria/components/size_cofig.dart';
+import 'package:cafeteria/screens/Cart.dart';
 import 'package:cafeteria/screens/home_page.dart';
-import 'package:cafeteria/components/loading.dart';
+import 'package:cafeteria/services/Provider/user_provider.dart';
 import 'package:cafeteria/widgets/Similar_products.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:cafeteria/models/product.dart';
 
 class ProductDetails extends StatefulWidget {
-  final product_detail_name;
-  final product_detail_picture;
-  final product_detail_price;
+  final String product_detail_name;
+  final String product_detail_picture;
+  final double product_detail_price;
+  final int product_detail_quantity;
+  final String product_detail_category;
+  final String product_detail_description;
+  final String product_detail_id;
 
-  ProductDetails(
-      {this.product_detail_name,
-      this.product_detail_picture,
-      this.product_detail_price});
+  ProductDetails({
+    this.product_detail_name,
+    this.product_detail_picture,
+    this.product_detail_category,
+    this.product_detail_description,
+    this.product_detail_quantity,
+    this.product_detail_price,
+    this.product_detail_id,
+  });
 
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  int quantity = 1;
+  bool favourite = false;
+
+  ProductModel product;
+  final _key = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context);
     SizeConfig().init(context);
+
     return Scaffold(
+      key: _key,
       appBar: PreferredSize(
           child: AppBar(
             elevation: 0.1,
@@ -36,13 +57,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
                 );
               },
-              child: Text(
-                'Cafeteria',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: SizeConfig.safeBlockVertical * 2.5,
-                ),
-              ),
+              child: Icon(Icons.home),
             ),
             flexibleSpace: Container(
                 decoration: BoxDecoration(
@@ -61,6 +76,19 @@ class _ProductDetailsState extends State<ProductDetails> {
                     color: Colors.white,
                   ),
                   onPressed: () {}),
+              new IconButton(
+                  icon: Icon(
+                    Icons.shopping_cart,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Cart(),
+                      ),
+                    );
+                  }),
             ],
           ),
           preferredSize: Size.fromHeight(
@@ -73,12 +101,12 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: GridTile(
               child: Container(
                 color: Colors.white,
-                child: Image.asset(
+                child: Image.network(
                   widget.product_detail_picture,
                 ),
               ),
               footer: new Container(
-                color: Colors.white70,
+                color: Colors.white,
                 child: ListTile(
                   leading: new Text(
                     widget.product_detail_name,
@@ -88,7 +116,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                   ),
                   title: new Text(
-                    "Rs.${widget.product_detail_price}",
+                    "Rs.${widget.product_detail_price.round()}",
                     textAlign: TextAlign.right,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -100,99 +128,269 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
             ),
           ),
+
           new Row(
             children: <Widget>[
               SizedBox(
-                width: 90,
+                width: SizeConfig.safeBlockVertical * 7,
               ),
-              Expanded(
-                child: MaterialButton(
-                    onPressed: () {
-                      showCupertinoDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: new Text('Quantity',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: SizeConfig.safeBlockVertical * 2,
-                                  )),
-                              content: new Text('Choose the quantity',
-                                  style: TextStyle(
-                                    fontSize: SizeConfig.safeBlockVertical * 2,
-                                  )),
-                              actions: <Widget>[
-                                new MaterialButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(context);
-                                  },
-                                  child: new Text('close',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            SizeConfig.safeBlockVertical * 2,
-                                      )),
-                                )
-                              ],
-                            );
-                          });
-                    },
-                    color: Colors.white,
-                    textColor: Colors.grey,
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: new Text('Quantity',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: SizeConfig.safeBlockVertical * 2,
-                              )),
+              quantity == 1
+                  ? Container(
+                      child: ClipOval(
+                        child: Material(
+                          elevation: 5,
+                          color: Colors.white,
+                          child: InkWell(
+                            splashColor: Colors.red,
+                            child: SizedBox(
+                              width: SizeConfig.safeBlockVertical * 5,
+                              height: SizeConfig.safeBlockVertical * 5,
+                              child: Icon(
+                                Icons.remove,
+                              ),
+                            ),
+                            onTap: () {
+                              if (quantity == 1) {
+                              } else {
+                                setState(() {
+                                  quantity--;
+                                });
+                              }
+                            },
+                          ),
                         ),
-                        Expanded(child: new Icon(Icons.arrow_drop_down))
-                      ],
-                    )),
-              ),
-              SizedBox(
-                width: 90,
-              ),
-            ],
-          ),
-          new Row(
-            children: <Widget>[
+                      ),
+                    )
+                  : Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.red.withOpacity(0.6),
+                              spreadRadius: 3,
+                              blurRadius: 3)
+                        ],
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: ClipOval(
+                        child: Material(
+                          elevation: 5,
+                          color: Colors.white,
+                          child: InkWell(
+                            splashColor: Colors.red,
+                            child: SizedBox(
+                              width: SizeConfig.safeBlockVertical * 5,
+                              height: SizeConfig.safeBlockVertical * 5,
+                              child: Icon(
+                                Icons.remove,
+                              ),
+                            ),
+                            onTap: () {
+                              if (quantity != 1) {
+                                setState(() {
+                                  quantity--;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
               SizedBox(
                 width: SizeConfig.safeBlockVertical * 2.5,
               ),
               Expanded(
                 child: MaterialButton(
-                  onPressed: () {},
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
+                  height: SizeConfig.safeBlockVertical * 7,
+                  onPressed: () async {
+                    if (quantity >= 1) {
+                      bool value = await user.addToCart(
+                        quantity: quantity,
+                        product_id: widget.product_detail_id,
+                        product_name: widget.product_detail_name,
+                        product_price: widget.product_detail_price.round(),
+                        product_imageUrl: widget.product_detail_picture,
+                      );
+                      user.reloadUserModel();
+                      setState(() {
+                        quantity = 1;
+                      });
+
+                      if (value) {
+                        _key.currentState.showSnackBar(
+                          SnackBar(
+                            duration: Duration(seconds: 3),
+                            content: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 1,
+                                  child: new Text('Added to Cart !'),
+                                ),
+                                Expanded(
+                                    flex: 1,
+                                    child: ButtonTheme(
+                                      height: SizeConfig.safeBlockVertical * 1,
+                                      child: new FlatButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Cart()));
+                                          },
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text(
+                                                'View Cart  ',
+                                                style: TextStyle(
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.shopping_cart,
+                                                color: Colors.blue,
+                                              ),
+                                            ],
+                                          )),
+                                    ))
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
                   color: Colors.red,
                   textColor: Colors.white,
-                  child: new Text(
-                    'Buy Now',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: SizeConfig.safeBlockVertical * 2.5,
-                    ),
-                  ),
+                  child: quantity > 1
+                      ? new Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            new Text(
+                              'Add  ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: SizeConfig.safeBlockVertical * 2.5,
+                              ),
+                            ),
+                            new Text(
+                              quantity.toString(),
+                              style: TextStyle(
+                                fontSize: SizeConfig.safeBlockVertical * 3.5,
+                              ),
+                            ),
+                            new Text(
+                              '  to Cart',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: SizeConfig.safeBlockVertical * 2.5,
+                              ),
+                            ),
+                          ],
+                        )
+                      : new Text(
+                          'Add to Cart',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: SizeConfig.safeBlockVertical * 2.5,
+                          ),
+                        ),
                 ),
               ),
               SizedBox(
                 width: SizeConfig.safeBlockVertical * 2.5,
               ),
-              new IconButton(
-                  icon: Icon(
-                    Icons.add_shopping_cart,
-                    size: SizeConfig.safeBlockVertical * 3,
-                  ),
-                  color: Colors.red,
-                  onPressed: () {}),
-              new IconButton(
-                  icon: Icon(
-                    Icons.favorite_border,
-                    size: SizeConfig.safeBlockVertical * 3,
-                  ),
-                  color: Colors.red,
-                  onPressed: () {})
+              quantity == widget.product_detail_quantity
+                  ? Container(
+                      child: ClipOval(
+                        child: Material(
+                          //elevation: 5,
+                          color: Colors.white,
+                          child: InkWell(
+                            splashColor: Colors.red,
+                            child: SizedBox(
+                              width: SizeConfig.safeBlockVertical * 5,
+                              height: SizeConfig.safeBlockVertical * 5,
+                              child: Icon(
+                                Icons.add,
+                              ),
+                            ),
+                            onTap: () {
+                              if (quantity != widget.product_detail_quantity) {
+                                setState(() {
+                                  quantity++;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.red.withOpacity(0.6),
+                              spreadRadius: 3,
+                              blurRadius: 3)
+                        ],
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: ClipOval(
+                        child: Material(
+                          //elevation: 5,
+                          color: Colors.white,
+                          child: InkWell(
+                            splashColor: Colors.red,
+                            child: SizedBox(
+                              width: SizeConfig.safeBlockVertical * 5,
+                              height: SizeConfig.safeBlockVertical * 5,
+                              child: Icon(
+                                Icons.add,
+                              ),
+                            ),
+                            onTap: () {
+                              if (quantity == widget.product_detail_quantity) {
+                                print('error');
+                                print(quantity);
+                              } else {
+                                setState(() {
+                                  quantity++;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+              SizedBox(
+                width: SizeConfig.safeBlockVertical * 7,
+              ),
+            ],
+          ),
+          Divider(),
+          new Padding(
+            padding: const EdgeInsets.all(8),
+            child: new Text(
+              'Description',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: SizeConfig.safeBlockVertical * 2.5,
+              ),
+            ),
+          ),
+          Row(
+            children: <Widget>[
+              SizedBox(
+                width: SizeConfig.safeBlockVertical * 4,
+              ),
+              Text(
+                widget.product_detail_description,
+                style: TextStyle(
+                  fontSize: SizeConfig.safeBlockVertical * 2,
+                ),
+              ),
             ],
           ),
           Divider(),
@@ -208,9 +406,9 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
 
           //Grid View
-          Container(
-            height: SizeConfig.safeBlockVertical * 50,
-            child: SimilarProducts(),
+          SimilarProducts(
+            category: widget.product_detail_category,
+            name: widget.product_detail_name,
           ),
         ],
       ),

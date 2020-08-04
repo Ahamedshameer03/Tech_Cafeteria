@@ -1,46 +1,66 @@
+import 'package:cafeteria/components/loading.dart';
 import 'package:cafeteria/components/size_cofig.dart';
+import 'package:cafeteria/screens/category_list.dart';
+import 'package:cafeteria/services/category_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class HorizontalList extends StatelessWidget {
+class HorizontalList extends StatefulWidget {
+  @override
+  _HorizontalListState createState() => _HorizontalListState();
+}
+
+class _HorizontalListState extends State<HorizontalList> {
+  List<DocumentSnapshot> categories = <DocumentSnapshot>[];
+
+  CategoryService _categoryService = CategoryService();
+
+  @override
+  void initState() {
+    _getCategories();
+  }
+
+  _getCategories() async {
+    List<DocumentSnapshot> data = await _categoryService.getCategories();
+    setState(() {
+      categories = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 150.0,
-      child: ListView(
+      child: ListView.builder(
+        itemCount: categories.length,
         scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          Category(
-            image_location: 'images/Categories/Snacks.png',
-            image_caption: 'Snacks',
-          ),
-          Category(
-            image_location: 'images/Categories/Breakfast.png',
-            image_caption: 'Tiffen',
-          ),
-          Category(
-            image_location: 'images/Categories/Drinks.png',
-            image_caption: 'Drinks',
-          ),
-          Category(
-            image_location: 'images/Categories/Lunch.png',
-            image_caption: 'Lunch',
-          ),
-          Category(
-            image_location: 'images/Categories/Fresh_Juice.png',
-            image_caption: 'Fresh Juice',
-          ),
-        ],
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.all(8),
+            child: Category(
+              image_location: categories[index].data['imageUrl'],
+              image_caption: categories[index].data['category'],
+              categoryIndex: index,
+            ),
+          );
+        },
       ),
     );
   }
 }
 
-class Category extends StatelessWidget {
+class Category extends StatefulWidget {
   final String image_location;
   final String image_caption;
+  final int categoryIndex;
 
-  Category({this.image_location, this.image_caption});
+  Category({this.image_location, this.image_caption, this.categoryIndex});
 
+  @override
+  _CategoryState createState() => _CategoryState();
+}
+
+class _CategoryState extends State<Category> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -51,15 +71,31 @@ class Category extends StatelessWidget {
         child: Container(
           width: SizeConfig.safeBlockHorizontal * 35,
           child: ListTile(
-              title: Image.asset(
-                image_location,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CategoryList(
+                      categoryIndex: widget.categoryIndex,
+                    ),
+                  ),
+                );
+              },
+              title: Image.network(
+                widget.image_location,
                 width: 150.0,
                 height: 120.0,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: Loading2(),
+                  );
+                },
               ),
               subtitle: Container(
                 alignment: Alignment.topCenter,
                 child: Text(
-                  image_caption,
+                  widget.image_caption,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: SizeConfig.safeBlockVertical * 1.5,

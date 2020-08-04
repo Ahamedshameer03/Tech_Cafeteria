@@ -1,156 +1,60 @@
-// import 'package:cafeteria/components/screen_navigation.dart';
-// import 'package:cafeteria/screens/Product_Details.dart';
-// import 'package:cafeteria/services/Provider/product_provider.dart';
-// import 'package:cafeteria/services/Provider/user_provider.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
+import 'package:cafeteria/components/size_cofig.dart';
+import 'package:cafeteria/services/product_services.dart';
+import 'package:cafeteria/widgets/single_product.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
-// import 'package:provider/provider.dart';
-// import 'package:transparent_image/transparent_image.dart';
+class FeaturedProducts extends StatefulWidget {
+  @override
+  _FeaturedProductsState createState() => _FeaturedProductsState();
+}
 
-// import 'custom_text.dart';
-// import 'loading.dart';
+class _FeaturedProductsState extends State<FeaturedProducts> {
+  List<DocumentSnapshot> products = <DocumentSnapshot>[];
+  ProductServices _productServices = ProductServices();
 
-// class Featured extends StatefulWidget {
-//   @override
-//   _FeaturedState createState() => _FeaturedState();
-// }
+  @override
+  void initState() {
+    //super.initState();
+    _getProducts();
+  }
 
-// class _FeaturedState extends State<Featured> {
-//   @override
-//   Widget build(BuildContext context) {
-//     final productProvider = Provider.of<ProductProvider>(context);
-//     final user = Provider.of<UserProvider>(context);
+  _getProducts() async {
+    List<DocumentSnapshot> data = await _productServices.getFeaturedProducts();
 
-//     return Container(
-//       height: 220,
-//       child: ListView.builder(
-//           scrollDirection: Axis.horizontal,
-//           itemCount: productProvider.products.length,
-//           itemBuilder: (_, index) {
-//             return Padding(
-//                 padding: EdgeInsets.fromLTRB(12, 14, 16, 12),
-//                 child: GestureDetector(
-//                   onTap: () {
-//                     changeScreen(
-//                         _,
-//                         ProductDetails(
-//                           product: productProvider.products[index],
-//                         ));
-//                   },
-//                   child: Container(
-//                     height: 220,
-//                     width: 200,
-//                     decoration: BoxDecoration(
-//                         color: white,
-//                         borderRadius: BorderRadius.circular(20),
-//                         boxShadow: [
-//                           BoxShadow(
-//                               color: Colors.grey[300],
-//                               offset: Offset(-2, -1),
-//                               blurRadius: 5),
-//                         ]),
-//                     child: Column(
-//                       children: <Widget>[
-//                         ClipRRect(
-//                           borderRadius: BorderRadius.only(
-//                               topLeft: Radius.circular(20),
-//                               topRight: Radius.circular(20)),
-//                           child: Stack(
-//                             children: <Widget>[
-//                               Positioned.fill(
-//                                   child: Align(
-//                                 alignment: Alignment.center,
-//                                 child: Loading(),
-//                               )),
-//                               Center(
-//                                 child: FadeInImage.memoryNetwork(
-//                                   placeholder: kTransparentImage,
-//                                   image: productProvider.products[index].image,
-//                                   height: 126,
-//                                 ),
-//                               )
-//                             ],
-//                           ),
-//                         ),
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                           children: <Widget>[
-//                             Padding(
-//                               padding: const EdgeInsets.all(8.0),
-//                               child: CustomText(
-//                                 text: productProvider.products[index].name ??
-//                                     "id null",
-//                               ),
-//                             ),
-//                             Padding(
-//                               padding: EdgeInsets.all(8),
-//                               child: GestureDetector(
-//                                 onTap: () {
-// //                                  setState(() {
-// //                                    productProvider.products[index].liked = !productProvider.products[index].liked;
-// //                                  });
-// //                                  productProvider.likeDislikeProduct(userId: user.userModel.id, product: productProvider.products[index], liked: productProvider.products[index].liked);
-//                                 },
-//                                 child: Container(),
-//                               ),
-//                             )
-//                           ],
-//                         ),
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                           children: <Widget>[
-//                             Row(
-//                               children: <Widget>[
-//                                 Padding(
-//                                   padding: const EdgeInsets.only(left: 8.0),
-//                                   child: CustomText(
-//                                     text: productProvider.products[index].rating
-//                                         .toString(),
-//                                     color: grey,
-//                                     size: 14.0,
-//                                   ),
-//                                 ),
-//                                 SizedBox(
-//                                   width: 2,
-//                                 ),
-//                                 Icon(
-//                                   Icons.star,
-//                                   color: red,
-//                                   size: 16,
-//                                 ),
-//                                 Icon(
-//                                   Icons.star,
-//                                   color: red,
-//                                   size: 16,
-//                                 ),
-//                                 Icon(
-//                                   Icons.star,
-//                                   color: red,
-//                                   size: 16,
-//                                 ),
-//                                 Icon(
-//                                   Icons.star,
-//                                   color: grey,
-//                                   size: 16,
-//                                 ),
-//                               ],
-//                             ),
-//                             Padding(
-//                               padding: const EdgeInsets.only(right: 8.0),
-//                               child: CustomText(
-//                                 text:
-//                                     "\$${productProvider.products[index].price / 100}",
-//                                 weight: FontWeight.bold,
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ));
-//           }),
-//     );
-//   }
-// }
+    setState(() {
+      products = data;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+
+    return Container(
+      height: products.length % 2 == 1
+          ? SizeConfig.safeBlockVertical * 24 * ((products.length + 1) / 2)
+          : SizeConfig.safeBlockVertical * 24 * (products.length / 2),
+      child: GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: products.length,
+        gridDelegate:
+            new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Single_Prod(
+              product_name: products[index].data['name'],
+              product_picture: products[index].data['imageUrl'],
+              product_price: products[index].data['price'],
+              product_category: products[index].data['category'],
+              product_description: products[index].data['description'],
+              product_quantity: products[index].data['quantity'],
+              product_id: products[index].data['id'],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

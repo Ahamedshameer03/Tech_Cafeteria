@@ -1,7 +1,5 @@
 import 'package:cafeteria/components/loading.dart';
-import 'package:cafeteria/models/users.dart';
-import 'package:cafeteria/screens/admin_home.dart';
-import 'package:cafeteria/screens/authenticate/sign_in_page.dart';
+import 'package:cafeteria/screens/Admin_side/admin_home.dart';
 import 'package:cafeteria/screens/home_page.dart';
 import 'package:cafeteria/screens/menu_frame.dart';
 import 'package:cafeteria/screens/splash_page.dart';
@@ -24,7 +22,7 @@ class MyApp extends StatelessWidget {
         title: 'Cafeteria',
         debugShowCheckedModeBanner: false,
         theme: ThemeData.from(colorScheme: ColorScheme.light()),
-        darkTheme: ThemeData.from(colorScheme: ColorScheme.dark()),
+        //darkTheme: ThemeData.from(colorScheme: ColorScheme.dark()),
         home: SplashScreen(),
         //home: Home(),
       ),

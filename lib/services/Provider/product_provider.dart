@@ -1,6 +1,5 @@
 import 'package:cafeteria/models/product.dart';
 import 'package:flutter/material.dart';
-
 import '../product_services.dart';
 
 class ProductProvider with ChangeNotifier {

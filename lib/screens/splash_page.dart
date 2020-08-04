@@ -55,18 +55,22 @@ class _SplashScreenState extends State<SplashScreen>
             child: SafeArea(
               child: new Scaffold(
                 body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: RichText(
-                        text: TextSpan(
-                            style: TextStyle(color: Colors.black),
-                            children: [
-                              TextSpan(text: 'Developed By '),
-                              TextSpan(
-                                  text: 'Shameer',
-                                  style: TextStyle(fontWeight: FontWeight.bold))
-                            ]),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: RichText(
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.yellow[900]),
+                              children: [
+                                TextSpan(text: 'Developed By  '),
+                                TextSpan(
+                                    text: 'Shameer',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold))
+                              ]),
+                        ),
                       ),
                     )
                   ],

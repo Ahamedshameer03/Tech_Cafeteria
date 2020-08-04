@@ -7,10 +7,9 @@ import 'package:cafeteria/services/Provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class SignUp extends StatefulWidget {
-  final Function cancelBackToHome;
+  final Function gotoSignIn;
 
-  SignUp({this.cancelBackToHome});
-
+  SignUp({this.gotoSignIn});
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -67,13 +66,11 @@ class _SignUpState extends State<SignUp> {
                         errorStyle: TextStyle(
                           color: Colors.white,
                         ),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                          color: Colors.transparent,
-                        )),
                         hintText: 'Enter Name',
                         labelText: 'Full Name',
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: TextStyle(
+                            color: Colors.blue[100],
+                            fontWeight: FontWeight.w300),
                         icon: Icon(
                           Icons.person_outline,
                           color: Colors.white70,
@@ -81,10 +78,19 @@ class _SignUpState extends State<SignUp> {
                         hintStyle:
                             TextStyle(color: Colors.white.withOpacity(0.3)),
                         focusColor: Colors.white,
-                        focusedBorder: UnderlineInputBorder(
+                        border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Colors.transparent,
+                            color: Colors.grey[100],
+                            style: BorderStyle.solid,
                           ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            //style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                       style: TextStyle(
@@ -128,14 +134,25 @@ class _SignUpState extends State<SignUp> {
                         errorStyle: TextStyle(
                           color: Colors.white,
                         ),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                          color: Colors.transparent,
-                        )),
                         hintText: 'Enter Email',
                         labelText: 'Email',
-                        labelStyle: TextStyle(color: Colors.white),
-                        border: InputBorder.none,
+                        labelStyle: TextStyle(
+                            color: Colors.blue[100],
+                            fontWeight: FontWeight.w300),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey[100],
+                            style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            //style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         icon: Icon(
                           Icons.alternate_email,
                           color: Colors.white70,
@@ -174,11 +191,11 @@ class _SignUpState extends State<SignUp> {
                         errorStyle: TextStyle(
                           color: Colors.white,
                         ),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent)),
-                        hintText: 'Enter Password',
+                        hintText: 'Enter Password (8-Char)',
                         labelText: 'Password',
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: TextStyle(
+                            color: Colors.blue[100],
+                            fontWeight: FontWeight.w300),
                         icon: Icon(
                           Icons.lock_outline,
                           color: Colors.white70,
@@ -198,10 +215,19 @@ class _SignUpState extends State<SignUp> {
                         hintStyle:
                             TextStyle(color: Colors.white.withOpacity(0.3)),
                         focusColor: Colors.white,
-                        focusedBorder: UnderlineInputBorder(
+                        border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Colors.transparent,
+                            color: Colors.grey[100],
+                            style: BorderStyle.solid,
                           ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            //style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                       style: TextStyle(
@@ -231,18 +257,29 @@ class _SignUpState extends State<SignUp> {
                         errorStyle: TextStyle(
                           color: Colors.white,
                         ),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                          color: Colors.transparent,
-                        )),
                         hintText: 'Re-Enter Password',
                         labelText: 'Confirm Password',
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: TextStyle(
+                            color: Colors.blue[100],
+                            fontWeight: FontWeight.w300),
                         icon: Icon(
                           Icons.lock_outline,
                           color: Colors.white70,
                         ),
-                        border: InputBorder.none,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey[100],
+                            style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            //style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         suffixIcon: IconButton(
                             icon: Icon(
                               _obscureText_1
@@ -270,20 +307,6 @@ class _SignUpState extends State<SignUp> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        InkWell(
-                          splashColor: Colors.redAccent,
-                          onTap: () {
-                            widget.cancelBackToHome();
-                          },
-                          child: Text(
-                            'CANCEL',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: SizeConfig.safeBlockVertical * 2.5,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
                         SizedBox(
                           width: SizeConfig.safeBlockVertical * 3,
                         ),
@@ -344,7 +367,7 @@ class _SignUpState extends State<SignUp> {
                             child: Text(
                               'Sign Up !',
                               style: TextStyle(
-                                color: Colors.red,
+                                color: Colors.blueAccent,
                                 fontSize: SizeConfig.safeBlockVertical * 2.5,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -360,6 +383,50 @@ class _SignUpState extends State<SignUp> {
                       'Agree to Terms & Conditions',
                       style: TextStyle(color: Colors.white),
                     ),
+                    SizedBox(
+                      height: SizeConfig.safeBlockVertical * 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Already have an Account ?',
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: SizeConfig.safeBlockVertical * 2,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          width: SizeConfig.safeBlockVertical * 2,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            widget.gotoSignIn();
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: SizeConfig.safeBlockVertical * 1.5,
+                              horizontal: SizeConfig.safeBlockHorizontal * 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(
+                                SizeConfig.safeBlockVertical * 5,
+                              ),
+                            ),
+                            child: Text(
+                              'Sign In',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: SizeConfig.safeBlockVertical * 2.5,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -367,52 +434,3 @@ class _SignUpState extends State<SignUp> {
           );
   }
 }
-
-/*Firestore.instance
-                    .collection("users")
-                    .document(authResult.user.uid)
-                    .setData({*/
-
-/*  void _createUser({String email, String pw}) {
-    _auth
-        .createUserWithEmailAndPassword(email: email, password: pw)
-        .then((authResult) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => MenuFrame()));
-      showCupertinoDialog(
-          context: context,
-          builder: (context) {
-            return CupertinoAlertDialog(
-              title: Text('Please Login to Continue'),
-              actions: <Widget>[
-                CupertinoDialogAction(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-            );
-          });
-    }).catchError((err) {
-      print(err.code);
-      if (err.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
-        showCupertinoDialog(
-            context: context,
-            builder: (context) {
-              return CupertinoAlertDialog(
-                title: Text(
-                    'This email already has an account associated with it'),
-                actions: <Widget>[
-                  CupertinoDialogAction(
-                    child: Text('OK'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ],
-              );
-            });
-      }
-    });
-  }*/

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  static const ID = "id";
+  static const ID = "userId";
   static const NAME = "name";
   static const EMAIL = "email";
   static const STRIPE_ID = "stripeId";
@@ -12,7 +12,6 @@ class UserModel {
   String _id;
   String _stripeId;
   int _priceSum = 0;
-  int _quantitySum = 0;
 
 //  getters
   String get name => _name;
@@ -28,7 +27,7 @@ class UserModel {
     _name = snapshot.data[NAME];
     _email = snapshot.data[EMAIL];
     _id = snapshot.data[ID];
-    _stripeId = snapshot.data[STRIPE_ID];
+    //_stripeId = snapshot.data[STRIPE_ID];
     cart = snapshot.data[CART] ?? [];
     totalCartPrice = snapshot.data[CART] == null
         ? 0
@@ -45,20 +44,6 @@ class UserModel {
 
     int total = _priceSum;
 
-    print("THE TOTAL IS $total");
-    print("THE TOTAL IS $total");
-    print("THE TOTAL IS $total");
-    print("THE TOTAL IS $total");
-    print("THE TOTAL IS $total");
-
     return total;
   }
-
-// List<CartItemModel> _convertCartItems(List<Map> cart){
-//    List<CartItemModel> convertedCart = [];
-//    for(Map cartItem in cart){
-//      convertedCart.add(CartItemModel.fromMap(cartItem));
-//    }
-//    return convertedCart;
-//  }
 }

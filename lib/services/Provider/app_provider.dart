@@ -1,10 +1,10 @@
-import 'package:cafeteria/services/add_product.dart';
 import 'package:cafeteria/models/product.dart';
+import 'package:cafeteria/services/product_services.dart';
 import 'package:flutter/material.dart';
 
 class AppProvider with ChangeNotifier {
   List<ProductModel> _products = [];
-  ProductService _productService = ProductService();
+  ProductServices _productService = ProductServices();
 
   AppProvider() {
     _getProducts();

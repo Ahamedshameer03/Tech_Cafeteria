@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:cafeteria/components/loading.dart';
 import 'package:cafeteria/services/Provider/user_provider.dart';
 import 'package:cafeteria/components/size_cofig.dart';
@@ -8,9 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 class SignIn extends StatefulWidget {
-  final Function cancelBackToHome;
+  final Function gotoSignUp;
+  final Function forgotPassword;
 
-  SignIn({this.cancelBackToHome});
+  SignIn({this.gotoSignUp, this.forgotPassword});
 
   @override
   SignInState createState() => SignInState();
@@ -82,27 +82,35 @@ class SignInState extends State<SignIn> {
                     },
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      errorStyle: TextStyle(
-                        color: Colors.white,
-                      ),
-                      enabledBorder: UnderlineInputBorder(
+                        errorStyle: TextStyle(
+                          color: Colors.white,
+                        ),
+                        hintText: 'Enter Email',
+                        labelText: 'Email',
+                        labelStyle: TextStyle(
+                            color: Colors.blue[100],
+                            fontWeight: FontWeight.w300),
+                        icon: Icon(
+                          Icons.person_outline,
+                          color: Colors.white70,
+                        ),
+                        hintStyle:
+                            TextStyle(color: Colors.white.withOpacity(0.3)),
+                        focusColor: Colors.white,
+                        border: OutlineInputBorder(
                           borderSide: BorderSide(
-                        color: Colors.transparent,
-                      )),
-                      hintText: 'Enter Email',
-                      labelText: 'Email',
-                      labelStyle: TextStyle(color: Colors.white),
-                      icon: Icon(
-                        Icons.person_outline,
-                        color: Colors.white70,
-                      ),
-                      hintStyle:
-                          TextStyle(color: Colors.white.withOpacity(0.3)),
-                      focusColor: Colors.white,
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
-                    ),
+                            color: Colors.grey[100],
+                            style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            //style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        )),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: SizeConfig.safeBlockVertical * 2.5,
@@ -129,13 +137,10 @@ class SignInState extends State<SignIn> {
                       errorStyle: TextStyle(
                         color: Colors.white,
                       ),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Colors.transparent,
-                      )),
                       hintText: ' Enter Password ...',
                       labelText: 'Password',
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(
+                          color: Colors.blue[100], fontWeight: FontWeight.w300),
                       hintStyle:
                           TextStyle(color: Colors.white.withOpacity(0.3)),
                       icon: Icon(
@@ -155,10 +160,19 @@ class SignInState extends State<SignIn> {
                             });
                           }),
                       focusColor: Colors.white,
-                      focusedBorder: UnderlineInputBorder(
+                      border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Colors.transparent,
+                          color: Colors.grey[100],
+                          style: BorderStyle.solid,
                         ),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                          //style: BorderStyle.solid,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     style: TextStyle(
@@ -243,7 +257,7 @@ class SignInState extends State<SignIn> {
                           child: Text(
                             'Sign In',
                             style: TextStyle(
-                              color: Colors.red,
+                              color: Colors.deepOrangeAccent,
                               fontSize: SizeConfig.safeBlockVertical * 2.5,
                               fontWeight: FontWeight.bold,
                             ),
@@ -260,48 +274,70 @@ class SignInState extends State<SignIn> {
                     style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(
-                    height: SizeConfig.safeBlockVertical * 15,
+                    height: SizeConfig.safeBlockVertical * 10,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () {
+                          widget.forgotPassword();
+                        },
+                        child: Container(
+                          height: SizeConfig.safeBlockVertical * 5,
+                          child: Center(
+                            child: Text(
+                              'Forgot Password ?  ',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: SizeConfig.safeBlockVertical * 2,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: SizeConfig.safeBlockVertical * 7,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Do not have an Account?',
+                        'Do not have an Account ?',
                         style: TextStyle(
-                            color: Colors.white,
-                            fontSize: SizeConfig.safeBlockHorizontal * 3),
+                          color: Colors.white70,
+                          fontSize: SizeConfig.safeBlockVertical * 2,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(
-                        width: SizeConfig.safeBlockVertical * 2.5,
+                        width: SizeConfig.safeBlockVertical * 2,
                       ),
-                      RaisedButton(
-                        onPressed: () {},
-                        color: Colors.transparent,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        child: Padding(
+                      InkWell(
+                        onTap: () {
+                          widget.gotoSignUp();
+                        },
+                        child: Container(
                           padding: EdgeInsets.symmetric(
-                            vertical: SizeConfig.safeBlockVertical * 1,
-                            horizontal: SizeConfig.safeBlockHorizontal * 1,
+                            vertical: SizeConfig.safeBlockVertical * 1.5,
+                            horizontal: SizeConfig.safeBlockHorizontal * 10,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Icon(
-                                Icons.arrow_back,
-                                color: Colors.white70,
-                              ),
-                              Text(
-                                ' Swipe Left',
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: SizeConfig.safeBlockVertical * 2.5,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(
+                              SizeConfig.safeBlockVertical * 5,
+                            ),
+                          ),
+                          child: Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              color: Colors.deepOrangeAccent,
+                              fontSize: SizeConfig.safeBlockVertical * 2.5,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -313,65 +349,3 @@ class SignInState extends State<SignIn> {
           ));
   }
 }
-
-/*  void _signIn(String em, String pw) {
-    _auth
-        .signInWithEmailAndPassword(email: em, password: pw)
-        .then((authResult) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Home()));
-    }).catchError((err) {
-      print(err.code);
-      if (err.code == 'ERROR_INVALID_EMAIL') {
-        showCupertinoDialog(
-            context: context,
-            builder: (context) {
-              return CupertinoAlertDialog(
-                title: Text('Invalid Email'),
-                actions: <Widget>[
-                  CupertinoDialogAction(
-                    child: Text('OK'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ],
-              );
-            });
-      }
-      if (err.code == 'ERROR_USER_NOT_FOUND') {
-        showCupertinoDialog(
-            context: context,
-            builder: (context) {
-              return CupertinoAlertDialog(
-                title: Text('No User Found With This Email Please Register'),
-                actions: <Widget>[
-                  CupertinoDialogAction(
-                    child: Text('OK'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ],
-              );
-            });
-      }
-      if (err.code == 'ERROR_WRONG_PASSWORD') {
-        showCupertinoDialog(
-            context: context,
-            builder: (context) {
-              return CupertinoAlertDialog(
-                title: Text('Invalid Password'),
-                actions: <Widget>[
-                  CupertinoDialogAction(
-                    child: Text('OK'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ],
-              );
-            });
-      }
-    });
-  }*/
